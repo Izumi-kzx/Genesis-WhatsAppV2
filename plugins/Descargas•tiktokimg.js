@@ -1,4 +1,4 @@
-import axios from 'axios';
+/* import axios from 'axios';
 
 let handler = async (m, { conn, usedPrefix, args, command, text }) => {
     if (!args[0]) {
@@ -54,4 +54,4 @@ handler.help = ['ig *<link>*'];
 handler.tags = ['dl'];
 handler.command = /^(ig|igdl|instagram)$/i;
 
-export default handler;
+export default handler; */
