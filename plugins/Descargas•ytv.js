@@ -1,24 +1,33 @@
-import fetch from 'node-fetch'
+import { googleImage } from '@bochilteam/scraper'
 
-let handler = async (m, { conn, command, text, usedPrefix }) => {
-if (!text) return conn.reply(m.chat, `❀ Ingresa un link de youtube`, m)
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    let user = global.db.data.users[m.sender]
 
-try {
-let api = await fetch(`https://axeel.my.id/api/download/video?url=${text}`)
-let json = await api.json()
-let { title, views, likes, description, author } = json.metadata
-let HS = `- Titulo : ${title}
-- Descripcion : ${description}
-- Visitas : ${views}
-- Likes : ${likes}
-- Autor : ${author}
-- Tamaño : ${json.downloads.size}
-`
-await conn.sendFile(m.chat, json.downloads.url, 'HasumiBotFreeCodes.mp4', HS, m)
-} catch (error) {
-console.error(error)
-}}
+    if (!text) throw `𝗤𝘂𝗲 𝗯𝘂𝘀𝗰𝗮𝗿? 🤔️\n𝗨𝘀𝗲𝗹𝗼 𝗱𝗲 𝗹𝗮 𝘀𝗶𝗴𝘂𝗶𝗲𝗻𝘁𝗲 𝗺𝗮𝗻𝗲𝗿𝗮\n𝗘𝗷𝗲𝗺𝗽𝗹𝗼:\n*${usedPrefix + command} Loli*`
 
-handler.command = /^(ytmp4)$/i
+    const res = await googleImage(text)
+    let image = res.getRandom()
+    let link = image
+
+    await delay(1000)
+
+    await conn.sendMessage(m.chat, { 
+        image: { url: link }, 
+        caption: `*🔎 Resultado De: ${text}*`, 
+        footer: dev, 
+        buttons: [
+            {
+                buttonId: `${usedPrefix + command} ${text}`,
+                buttonText: { displayText: 'Siguiente' }
+            }
+        ],
+        viewOnce: true,
+        headerType: 4
+    }, { quoted: m })
+}
+
+handler.help = ['imagen *<texto>*']
+handler.tags = ['internet', 'dl']
+handler.command = /^(image2|imagen2)$/i
 
 export default handler
