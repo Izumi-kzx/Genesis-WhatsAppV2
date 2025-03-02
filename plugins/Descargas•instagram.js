@@ -1,8 +1,3 @@
-/* 
-- Downloader Instagram By Izumi-kzx
-- Descarga todo de Instagram como publicaciones, historias, reels, destacadas
-- https://whatsapp.com/channel/0029VaJxgcB0bIdvuOwKTM2Y
-*/
 import axios from 'axios';
 
 let handler = async (m, { conn, args }) => {
@@ -11,7 +6,7 @@ let handler = async (m, { conn, args }) => {
         return conn.reply(m.chat, `🍟 Ingresa un link de Instagram`, m);
     }
 
-    if (!args[0].match(new RegExp('^https?:\\/\\/www\\.instagram\\.com\\/([a-zA-Z0-9_-]+)\\/.*$'))) {
+    if (!args[0].match(/^https?:\/\/www\.instagram\.com\/([a-zA-Z0-9_-]+)\/.*$/)) {
         await m.react('✖️');
         return conn.reply(m.chat, `☁️ Verifica que sea un link válido de Instagram`, m);
     }
@@ -28,7 +23,7 @@ let handler = async (m, { conn, args }) => {
             if (!processedUrls.has(a.url)) {
                 processedUrls.add(a.url);
 
-                if (a.url.match(/\.(jpg|png|jpeg|webp|heic|tiff|bmp)$/)) {
+                if (/\.(jpg|png|jpeg|webp|heic|tiff|bmp)$/.test(a.url)) {
                     images.push({
                         image: { url: a.url },
                         caption: '*✔️🍟 Downloader Instagram.*'
@@ -42,10 +37,21 @@ let handler = async (m, { conn, args }) => {
             }
         }
 
-        if (images.length > 0) {
-            await conn.sendAlbumMessage(m.chat, images, { quoted: m });
+        // Verificar si hay imágenes y si sendAlbumMessage es compatible
+        if (images.length > 1) {
+            try {
+                await conn.sendAlbumMessage(m.chat, images, { quoted: m });
+            } catch (err) {
+                console.log('Error en sendAlbumMessage, enviando imágenes individualmente.');
+                for (let img of images) {
+                    await conn.sendMessage(m.chat, img, { quoted: m });
+                }
+            }
+        } else if (images.length === 1) {
+            await conn.sendMessage(m.chat, images[0], { quoted: m });
         }
 
+        // Enviar videos individualmente
         for (let video of videos) {
             await conn.sendMessage(m.chat, video, { quoted: m });
         }
