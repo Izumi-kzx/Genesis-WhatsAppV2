@@ -29,31 +29,19 @@ let handler = async (m, { conn, args }) => {
                         caption: '*✔️🍟 Downloader Instagram.*'
                     });
                 } else {
-                    videos.push({
-                        video: { url: a.url },
-                        caption: '*✔️🍟 Downloader Instagram.*'
-                    });
+                    videos.push(a.url);
                 }
             }
         }
 
-        // Verificar si hay imágenes y si sendAlbumMessage es compatible
-        if (images.length > 1) {
-            try {
-                await conn.sendAlbumMessage(m.chat, images, { quoted: m });
-            } catch (err) {
-                console.log('Error en sendAlbumMessage, enviando imágenes individualmente.');
-                for (let img of images) {
-                    await conn.sendMessage(m.chat, img, { quoted: m });
-                }
-            }
-        } else if (images.length === 1) {
-            await conn.sendMessage(m.chat, images[0], { quoted: m });
+        // Enviar imágenes como álbum
+        if (images.length > 0) {
+            await conn.sendAlbumMessage(m.chat, images, { quoted: m });
         }
 
         // Enviar videos individualmente
-        for (let video of videos) {
-            await conn.sendMessage(m.chat, video, { quoted: m });
+        for (let videoUrl of videos) {
+            await conn.sendMessage(m.chat, { video: { url: videoUrl }, caption: '*✔️🍟 Downloader Instagram.*' }, { quoted: m });
         }
 
         await m.react('✅'); 
