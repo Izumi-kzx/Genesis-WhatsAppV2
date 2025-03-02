@@ -34,9 +34,12 @@ let handler = async (m, { conn, args }) => {
             }
         }
 
-        // Enviar imágenes como álbum
-        if (images.length > 0) {
+        // Enviar imágenes como álbum si hay más de una
+        if (images.length > 1) {
             await conn.sendAlbumMessage(m.chat, images, { quoted: m });
+        } else if (images.length === 1) {
+            // Si solo hay una imagen, enviarla como mensaje normal
+            await conn.sendMessage(m.chat, images[0], { quoted: m });
         }
 
         // Enviar videos individualmente
