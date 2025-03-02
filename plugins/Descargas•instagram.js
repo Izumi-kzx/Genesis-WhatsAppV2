@@ -5,10 +5,10 @@
 */
 import axios from 'axios';
 
-let handler = async (m, { conn, usedPrefix, args, command, text }) => {
+let handler = async (m, { conn, args }) => {
     if (!args[0]) {
         await m.react('✖️');
-        return conn.reply(m.chat, `🍟 Ingresa un link de Instagram`, m, fake);
+        return conn.reply(m.chat, `🍟 Ingresa un link de Instagram`, m);
     }
 
     if (!args[0].match(new RegExp('^https?:\\/\\/www\\.instagram\\.com\\/([a-zA-Z0-9_-]+)\\/.*$'))) {
@@ -21,34 +21,35 @@ let handler = async (m, { conn, usedPrefix, args, command, text }) => {
         let api = await axios.get(`https://apidl.asepharyana.cloud/api/downloader/igdl?url=${args[0]}`);
 
         let processedUrls = new Set();
+        let images = [];
+        let videos = [];
 
         for (let a of api.data.data) {
             if (!processedUrls.has(a.url)) {
                 processedUrls.add(a.url);
 
-                // Verificación de si la URL es una imagen o un video
-                if (a.url.includes('jpg') || a.url.includes('png') || a.url.includes('jpeg') || a.url.includes('webp') || a.url.includes('heic') || a.url.includes('tiff') || a.url.includes('bmp')) {
-                   // await conn.sendAlbumMessage(m.chat, a.url, { quoted: m });
-                    await conn.sendAlbumMessage(
-                        m.chat,
-                        { 
-                            image: { url: a.url }, 
-                            caption: '*✔️🍟Downloader instagram.*' 
-                        },
-                        { quoted: m }
-                    );
+                if (a.url.match(/\.(jpg|png|jpeg|webp|heic|tiff|bmp)$/)) {
+                    images.push({
+                        image: { url: a.url },
+                        caption: '*✔️🍟 Downloader Instagram.*'
+                    });
                 } else {
-                    await conn.sendMessage(
-                        m.chat,
-                        { 
-                            video: { url: a.url }, 
-                            caption: '*✔️🍟Downloader instagram.*' 
-                        },
-                        { quoted: m }
-                    );
+                    videos.push({
+                        video: { url: a.url },
+                        caption: '*✔️🍟 Downloader Instagram.*'
+                    });
                 }
             }
         }
+
+        if (images.length > 0) {
+            await conn.sendAlbumMessage(m.chat, images, { quoted: m });
+        }
+
+        for (let video of videos) {
+            await conn.sendMessage(m.chat, video, { quoted: m });
+        }
+
         await m.react('✅'); 
     } catch (error) {
         console.log(error);
