@@ -28,15 +28,15 @@ let handler = async (m, { conn, usedPrefix, args, command, text }) => {
 
                 // Verificación de si la URL es una imagen o un video
                 if (a.url.includes('jpg') || a.url.includes('png') || a.url.includes('jpeg') || a.url.includes('webp') || a.url.includes('heic') || a.url.includes('tiff') || a.url.includes('bmp')) {
-                    await conn.sendAlbumMessage(m.chat, a.url, { quoted: m });
-                  /*  await conn.sendMessage(
+                   // await conn.sendAlbumMessage(m.chat, a.url, { quoted: m });
+                    await conn.sendAlbumMessage(
                         m.chat,
                         { 
                             image: { url: a.url }, 
                             caption: '*✔️🍟Downloader instagram.*' 
                         },
                         { quoted: m }
-                    ); */
+                    );
                 } else {
                     await conn.sendMessage(
                         m.chat,
