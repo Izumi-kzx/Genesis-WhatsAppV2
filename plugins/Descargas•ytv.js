@@ -9,8 +9,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     let image = res.getRandom()
     let link = image
 
-    await delay(1000)
-
     await conn.sendMessage(m.chat, { 
         image: { url: link }, 
         caption: `*🔎 Resultado De: ${text}*`, 
