@@ -37,7 +37,7 @@ let handler = async (m, { args, usedPrefix, command }) => {
        txt += `*${textbot}*`
 
 await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m, null, rcanal)
-await conn.sendFile(m.chat, await zipResponse.buffer(), filename, null, m)
+await conn.sendFile(m.chat, await zipResponse.arrayBuffer(), filename, null, m)
 await m.react(done)
   } catch {
 await m.react(error)
