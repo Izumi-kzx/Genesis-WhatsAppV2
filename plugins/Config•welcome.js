@@ -17,12 +17,12 @@ await conn.sendMini(m.chat, packname, dev, wel, img, img, channel, fkontak)
 
   if (chat.welcome && m.messageStubType == 28) {
    let bye = `ゲ◜៹ Bye Member ៹◞ゲ \n Usuario: @${m.messageStubParameters[0].split`@`[0]} 」\n Grupo: ${groupMetadata.subject}\n Powered By Daniel`
-await conn.sendMini(m.chat, packname, dev, bye, img2, img2, channel, fkontak)
+await conn.sendMini(m.chat, packname, dev, bye, img2, img2, canal, fkontak)
   }
 
   if (chat.welcome && m.messageStubType == 29) {
    let bye = `ゲ◜៹ Bye Member ៹◞ゲ \n Usuario: @${m.messageStubParameters[0].split`@`[0]} 」\n Grupo: ${groupMetadata.subject}\n Powered By Daniel`
-await conn.sendMini(m.chat, packname, dev, bye, img2, img2, channel, fkontak)
+await conn.sendMini(m.chat, packname, dev, bye, img2, img2, canal, fkontak)
   }}
 
 /*import { WAMessageStubType } from '@whiskeysockets/baileys';
